@@ -1,0 +1,1155 @@
+js = panorama.RunScript([[
+    var ep_globals = {
+        
+        handlers: {},
+
+        elements: {},
+
+        config: {
+            prefix: '!',
+        },
+
+        update_config: function(type, value) {
+            ep_globals.config[type] = value;
+        },
+
+        symbols: {
+            bullet: '\u{2022}',
+            check: '\u{2714}',
+            times: '\u{2716}',
+            warning: '\u{26A0}',
+            location: '\u{25BC}',
+            ball8: '\u{2791}',
+            dice: ['\u{2680}', '\u{2681}', '\u{2682}', '\u{2683}', '\u{2684}', '\u{2685}']
+        },
+
+        regex: {
+            steamid64: /^(7656[0-9]{13})$/i,
+            lobby_index: /^([1-9]{1})$/i,
+            friend_code: /^(\w{5}-\w{4})$/i,
+            competitive: /^(mm|comp.{0,7})$/i,
+            wingman: /^(wm|wing.{0,3})$/i
+        },
+
+        locations: {
+            AF: "Afghanistan",
+            AX: "Åland Islands",
+            AL: "Albania",
+            DZ: "Algeria",
+            AS: "American Samoa",
+            AD: "AndorrA",
+            AO: "Angola",
+            AI: "Anguilla",
+            AQ: "Antarctica",
+            AG: "Antigua and Barbuda",
+            AR: "Argentina",
+            AM: "Armenia",
+            AW: "Aruba",
+            AU: "Australia",
+            AT: "Austria",
+            AZ: "Azerbaijan",
+            BS: "Bahamas",
+            BH: "Bahrain",
+            BD: "Bangladesh",
+            BB: "Barbados",
+            BY: "Belarus",
+            BE: "Belgium",
+            BZ: "Belize",
+            BJ: "Benin",
+            BM: "Bermuda",
+            BT: "Bhutan",
+            BO: "Bolivia",
+            BA: "Bosnia and Herzegovina",
+            BW: "Botswana",
+            BV: "Bouvet Island",
+            BR: "Brazil",
+            IO: "British Indian Ocean Territory",
+            BN: "Brunei Darussalam",
+            BG: "Bulgaria",
+            BF: "Burkina Faso",
+            BI: "Burundi",
+            KH: "Cambodia",
+            CM: "Cameroon",
+            CA: "Canada",
+            CV: "Cape Verde",
+            KY: "Cayman Islands",
+            CF: "Central African Republic",
+            TD: "Chad",
+            CL: "Chile",
+            CN: "China",
+            CX: "Christmas Island",
+            CC: "Cocos (Keeling) Islands",
+            CO: "Colombia",
+            KM: "Comoros",
+            CG: "Congo",
+            CD: "Congo, The Democratic Republic of the",
+            CK: "Cook Islands",
+            CR: "Costa Rica",
+            CI: "Cote D\'Ivoire",
+            HR: "Croatia",
+            CU: "Cuba",
+            CY: "Cyprus",
+            CZ: "Czech Republic",
+            DK: "Denmark",
+            DJ: "Djibouti",
+            DM: "Dominica",
+            DO: "Dominican Republic",
+            EC: "Ecuador",
+            EG: "Egypt",
+            SV: "El Salvador",
+            GQ: "Equatorial Guinea",
+            ER: "Eritrea",
+            EE: "Estonia",
+            ET: "Ethiopia",
+            FK: "Falkland Islands (Malvinas)",
+            FO: "Faroe Islands",
+            FJ: "Fiji",
+            FI: "Finland",
+            FR: "France",
+            GF: "French Guiana",
+            PF: "French Polynesia",
+            TF: "French Southern Territories",
+            GA: "Gabon",
+            GM: "Gambia",
+            GE: "Georgia",
+            DE: "Germany",
+            GH: "Ghana",
+            GI: "Gibraltar",
+            GR: "Greece",
+            GL: "Greenland",
+            GD: "Grenada",
+            GP: "Guadeloupe",
+            GU: "Guam",
+            GT: "Guatemala",
+            GG: "Guernsey",
+            GN: "Guinea",
+            GW: "Guinea-Bissau",
+            GY: "Guyana",
+            HT: "Haiti",
+            HM: "Heard Island and Mcdonald Islands",
+            VA: "Holy See (Vatican City State)",
+            HN: "Honduras",
+            HK: "Hong Kong",
+            HU: "Hungary",
+            IS: "Iceland",
+            IN: "India",
+            ID: "Indonesia",
+            IR: "Iran, Islamic Republic Of",
+            IQ: "Iraq",
+            IE: "Ireland",
+            IM: "Isle of Man",
+            IL: "Israel",
+            IT: "Italy",
+            JM: "Jamaica",
+            JP: "Japan",
+            JE: "Jersey",
+            JO: "Jordan",
+            KZ: "Kazakhstan",
+            KE: "Kenya",
+            KI: "Kiribati",
+            KP: "Korea, Democratic People\'S Republic of",
+            KR: "Korea, Republic of",
+            KW: "Kuwait",
+            KG: "Kyrgyzstan",
+            LA: "Lao People\'S Democratic Republic",
+            LV: "Latvia",
+            LB: "Lebanon",
+            LS: "Lesotho",
+            LR: "Liberia",
+            LY: "Libyan Arab Jamahiriya",
+            LI: "Liechtenstein",
+            LT: "Lithuania",
+            LU: "Luxembourg",
+            MO: "Macao",
+            MK: "Macedonia, The Former Yugoslav Republic of",
+            MG: "Madagascar",
+            MW: "Malawi",
+            MY: "Malaysia",
+            MV: "Maldives",
+            ML: "Mali",
+            MT: "Malta",
+            MH: "Marshall Islands",
+            MQ: "Martinique",
+            MR: "Mauritania",
+            MU: "Mauritius",
+            YT: "Mayotte",
+            MX: "Mexico",
+            FM: "Micronesia, Federated States of",
+            MD: "Moldova, Republic of",
+            MC: "Monaco",
+            MN: "Mongolia",
+            MS: "Montserrat",
+            MA: "Morocco",
+            MZ: "Mozambique",
+            MM: "Myanmar",
+            NA: "Namibia",
+            NR: "Nauru",
+            NP: "Nepal",
+            NL: "Netherlands",
+            AN: "Netherlands Antilles",
+            NC: "New Caledonia",
+            NZ: "New Zealand",
+            NI: "Nicaragua",
+            NE: "Niger",
+            NG: "Nigeria",
+            NU: "Niue",
+            NF: "Norfolk Island",
+            MP: "Northern Mariana Islands",
+            NO: "Norway",
+            OM: "Oman",
+            PK: "Pakistan",
+            PW: "Palau",
+            PS: "Palestinian Territory, Occupied",
+            PA: "Panama",
+            PG: "Papua New Guinea",
+            PY: "Paraguay",
+            PE: "Peru",
+            PH: "Philippines",
+            PN: "Pitcairn",
+            PL: "Poland",
+            PT: "Portugal",
+            PR: "Puerto Rico",
+            QA: "Qatar",
+            RE: "Reunion",
+            RO: "Romania",
+            RU: "Russian Federation",
+            RW: "RWANDA",
+            SH: "Saint Helena",
+            KN: "Saint Kitts and Nevis",
+            LC: "Saint Lucia",
+            PM: "Saint Pierre and Miquelon",
+            VC: "Saint Vincent and the Grenadines",
+            WS: "Samoa",
+            SM: "San Marino",
+            ST: "Sao Tome and Principe",
+            SA: "Saudi Arabia",
+            SN: "Senegal",
+            CS: "Serbia and Montenegro",
+            SC: "Seychelles",
+            SL: "Sierra Leone",
+            SG: "Singapore",
+            SK: "Slovakia",
+            SI: "Slovenia",
+            SB: "Solomon Islands",
+            SO: "Somalia",
+            ZA: "South Africa",
+            GS: "South Georgia and the South Sandwich Islands",
+            ES: "Spain",
+            LK: "Sri Lanka",
+            SD: "Sudan",
+            SR: "Suriname",
+            SJ: "Svalbard and Jan Mayen",
+            SZ: "Swaziland",
+            SE: "Sweden",
+            CH: "Switzerland",
+            SY: "Syrian Arab Republic",
+            TW: "Taiwan, Province of China",
+            TJ: "Tajikistan",
+            TZ: "Tanzania, United Republic of",
+            TH: "Thailand",
+            TL: "Timor-Leste",
+            TG: "Togo",
+            TK: "Tokelau",
+            TO: "Tonga",
+            TT: "Trinidad and Tobago",
+            TN: "Tunisia",
+            TR: "Turkey",
+            TM: "Turkmenistan",
+            TC: "Turks and Caicos Islands",
+            TV: "Tuvalu",
+            UG: "Uganda",
+            UA: "Ukraine",
+            AE: "United Arab Emirates",
+            GB: "United Kingdom",
+            US: "United States",
+            UM: "United States Minor Outlying Islands",
+            UY: "Uruguay",
+            UZ: "Uzbekistan",
+            VU: "Vanuatu",
+            VE: "Venezuela",
+            VN: "Viet Nam",
+            VG: "Virgin Islands, British",
+            VI: "Virgin Islands, U.S.",
+            WF: "Wallis and Futuna",
+            EH: "Western Sahara",
+            YE: "Yemen",
+            ZM: "Zambia",
+            ZW: "Zimbabwe"
+        },
+
+        create: function(content, panels) {
+            panels.forEach((x) => {
+                let el = content.FindChildTraverse(x.id);
+                if (typeof el !== "undefined" && el !== null) return;
+
+                content.BCreateChildren(x.panel);
+                x.scripts.forEach(y => y(content));
+            });
+
+            return true;
+        },
+
+        destroy: function(content, panels) {
+            panels.forEach((x) => {
+                let el = content.FindChildTraverse(x.id);
+                if (typeof el === "undefined" || el === null) return;
+
+                el.DeleteAsync(0.0);
+            });
+
+            return true;
+        },
+
+        register_events: function(event, func) {
+            if (!ep_globals.handlers[event]) {
+                ep_globals.handlers[event] = [];
+            }
+
+            ep_globals.handlers[event].push(func);
+        },
+
+        unregister_events: function() {
+            for (const [key, value] of Object.entries(ep_globals.handlers)) {
+                for (const v of value) {
+                    $.UnregisterForUnhandledEvent(key, v);
+                    ep_globals.handlers[key] = ep_globals.handlers[key].filter((x) => x != v);
+                for (const [key, value] of Object.entries(ep_globals.elements)) {
+                    value(); // destroy elements
+                };
+                }
+            }
+        },
+
+        apply_styles: function(target, styles) {
+            for (const [key, value] of Object.entries(styles)) {
+                target.style[key] = value;
+            }
+        },
+
+        open_ad: function() {
+            SteamOverlayAPI.OpenExternalBrowserURL('ev0lve.xyz');
+        },
+    };
+
+    var ep_time = (function()
+    {
+        const month_names = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        const get_formatted_date = function(date, preformatted = false, hide_year = false) {
+            const day = date.getDate();
+            const month = month_names[date.getMonth()];
+            const year = date.getFullYear();
+            const hours = date.getHours();
+            let minutes = date.getMinutes();
+
+            if (minutes < 10) {
+                // Adding leading zero to minutes
+                minutes = `0${ minutes }`;
+            }
+
+            if (preformatted) {
+                // Today at 10:20
+                // Yesterday at 10:20
+                return `${ preformatted } at ${ hours }:${ minutes }`;
+            }
+
+            if (hide_year) {
+                // 10. January at 10:20
+                return `${ day }. ${ month } at ${ hours }:${ minutes }`;
+            }
+
+            // 10. January 2017. at 10:20
+            return `${ day }. ${ month } ${ year } at ${ hours }:${ minutes }`;
+        };
+
+        const _ago = function(date) {
+            if (!date) {
+                return null;
+            }
+
+            const this_date = typeof date === 'object' ? date : new Date(date);
+            const day_in_ms = 86400000; // 24 * 60 * 60 * 1000
+            const today = new Date();
+            const yesterday = new Date(today - day_in_ms);
+            const seconds = Math.round((today - this_date) / 1000);
+            const minutes = Math.round(seconds / 60);
+            const is_today = today.toDateString() === date.toDateString();
+            const is_yesterday = yesterday.toDateString() === date.toDateString();
+            const is_this_year = today.getFullYear() === date.getFullYear();
+
+
+            if (seconds < 5) {
+                return 'now';
+            } else if (seconds < 60) {
+                return `${ seconds } seconds ago`;
+            } else if (seconds < 90) {
+                return 'about a minute ago';
+            } else if (minutes < 60) {
+                return `${ minutes } minutes ago`;
+            } else if (is_today) {
+                return get_formatted_date(this_date, 'Today'); // Today at 10:20
+            } else if (is_yesterday) {
+                return get_formatted_date(this_date, 'Yesterday'); // Yesterday at 10:20
+            } else if (is_this_year) {
+                return get_formatted_date(this_date, false, true); // 10. January at 10:20
+            }
+
+            return get_formatted_date(this_date); // 10. January 2017. at 10:20
+        };
+
+        return {
+            ago: _ago
+        };
+    })();
+
+    ep_steam_profile = function(profile) {
+        let _ = profile;
+
+        const persona = [
+            'Offline',
+            'Online',
+            'Busy',
+            'Away',
+            'Snooze',
+            'looking to trade',
+            'looking to play'
+        ];
+
+        const visiblity = {
+            1: 'Private',
+            3: 'Public'
+        };
+
+        const _this = function() {
+            return _;
+        };
+
+        const _id = function() {
+            return _.steamid;
+        };
+
+        const _name = function(method) {
+            switch (method) {
+                case 'custom':
+                    const matches = _url().match(/steamcommunity.com\/(id|profiles)\/(.*)[/]/i);
+                    $.Msg(matches);
+                    return matches[2];
+                    break;
+
+                default:
+                    return _.personaname;
+                    break;
+            }
+        };
+
+        const _url = function(method) {
+            switch (method) {
+                case 'id':
+                    return `https://steamcommunity.com/profiles/${_id()}`
+                    break;
+
+                default:
+                    return _.profileurl;
+                    break;
+            }
+        };
+
+        const _avatar = function(method) {
+            switch (method) {
+                case 'small':
+                    return _.avatar;
+                    break;
+
+                case 'medium':
+                    return _.avatarmedium;
+                    break;
+
+                case 'hash':
+                    return _.avatarhash;
+                    break;
+
+                default:
+                    return _.avatarfull;
+                    break;
+            }
+        };
+
+        const _persona_state = function() {
+            return persona[_.profilestate];
+        };
+
+        const _visibility_state = function() {
+            return visibility[_.communityvisibilitystate];
+        };
+
+        // useless
+        const _profile_state = function() {
+            return typeof _.profilestate === 'undefined' ? 0 : 1;
+        };
+
+        const _last_online = function() {
+            return ep_time.ago(new Date(_.lastlogoff * 1000));
+        };
+
+        const _comment_state = function() {
+            return typeof _.commentpermission === 'undefined' ? 0 : 1;
+        };
+
+        const _created = function() {
+            return typeof _.timecreated === 'undefined' ? false : ep_time.ago(new Date(_.timecreated * 1000));
+        };
+
+        const _primary_clanid = function() {
+            return typeof _.primaryclanid === 'undefined' ? false : _.primaryclanid;
+        };
+
+        return {
+            _: _this,
+            id: _id,
+            name: _name,
+            url: _url,
+            avatar: _avatar,
+            persona_state: _persona_state,
+            visibility_state: _visibility_state,
+            profile_state: _profile_state,
+            last_online: _last_online,
+            comment_state: _comment_state,
+            created: _created,
+            primary_clanid: _primary_clanid
+        };
+    };
+
+    var ep_nearby_helper = (function()
+    {
+        const content = $.GetContextPanel().FindChildTraverse("JsFriendsList-lobbies").FindChildTraverse("JsFriendsListSettings").GetChild(0);
+        const panels = [
+            {
+                "id": "nearby_helper_invite_btn",
+                "panel": `
+                    <Button id="nearby_helper_invite_btn"
+                        class="IconButton"
+                        onmouseover="UiToolkitAPI.ShowTextTooltip( 'nearby_helper_invite_btn', 'Invite Nearby' );"
+                        onmouseout="UiToolkitAPI.HideTextTooltip();">
+                        <Image src="file://{images}/icons/ui/invite.svg" />
+                    </Button>
+                `,
+                "scripts": [
+                    (content) => {
+                        content.FindChildTraverse("nearby_helper_invite_btn").SetPanelEvent('onactivate', ep_nearby_helper.invite)
+                    },
+                    (content) => { 
+                        content.MoveChildBefore(content.FindChildTraverse("nearby_helper_invite_btn"), content.FindChildTraverse("JsFriendsList-lobbies-toolbar-button-refresh"));
+                    }
+                ]
+            }
+        ];
+
+        const _init = function() {
+            if (!content.BHasClass("left-right-flow")) content.AddClass("left-right-flow");
+
+            ep_globals.destroy(content, panels);
+            ep_globals.create(content, panels);
+
+            ep_globals.elements.nearby_helper = () => { ep_globals.destroy(content, panels); };
+        };
+
+        const _invite = function() {
+            const nearby_count = PartyBrowserAPI.GetResultsCount();
+
+            if (nearby_count.length <= 0) return false;
+
+            for (let i = 0; i < nearby_count; i++) {
+                StoreAPI.RecordUIEvent("ActionInviteFriendFrom_nearby");
+                const xuid = PartyBrowserAPI.GetXuidByIndex(i);
+                FriendsListAPI.ActionInviteFriend(xuid, '');
+                $.DispatchEvent('FriendInvitedFromContextMenu', xuid);
+            }
+
+            return true;
+        };
+
+        return {
+            init: _init,
+            invite: _invite
+        };
+    })();
+
+    var ep_match_helper = (function()
+    {
+        let content = null
+        const panels = [
+            {
+                "id": "match_helper_panel",
+                "panel": `
+                    <Panel id="match_helper_panel"
+                        class="horizontal-align-right left-right-flow">
+                        <Button id="match_helper_leave_btn"
+                            class="IconButton horizontal-align-right">
+                            onmouseover="UiToolkitAPI.ShowTextTooltip( 'match_helper_leave_btn', 'Leave Lobby' );"
+                            onmouseout="UiToolkitAPI.HideTextTooltip();">
+                            <Image src="file://{images}/icons/ui/leave.svg" />
+                        </Button>
+
+                        <Button id="match_helper_cancel_btn"
+                            class="IconButton horizontal-align-right">
+                            onmouseover="UiToolkitAPI.ShowTextTooltip( 'match_helper_cancel_btn', 'Cancel Queue' );"
+                            onmouseout="UiToolkitAPI.HideTextTooltip();">
+                            <Image src="file://{images}/icons/ui/cancel.svg" />
+                        </Button>
+                    </Panel>
+                `,
+                "scripts": [
+                    (content) => { 
+                        content.FindChildTraverse("match_helper_leave_btn").SetPanelEvent('onactivate', () => { LobbyAPI.CloseSession(); })
+                    },
+                    (content) => {
+                        content.FindChildTraverse("match_helper_cancel_btn").SetPanelEvent('onactivate', () => { LobbyAPI.StopMatchmaking(); })
+                    }
+                ]
+            }
+        ];
+
+        const _init = function(popup) {
+            content = popup.FindChildrenWithClassTraverse("accept-match__bg")[0];
+            ep_globals.destroy(content, panels);
+            ep_globals.create(content, panels);
+        };
+
+        return {
+            init: _init
+        }
+    })(); 
+    
+    var ep_lobby_commands = (function()
+    {
+        const _utils = {
+            party: function(msg) {
+                let filter_msg = msg.split(' ').join('\u{00A0}');
+                PartyListAPI.SessionCommand('Game::Chat', `run all xuid ${MyPersonaAPI.GetXuid()} chat ${filter_msg}`);
+            },
+
+            success: function(msg) {
+                let prefix = `${ep_globals.symbols.check} ${ep_globals.symbols.bullet} ${msg}`
+                let filter_msg = prefix.split(' ').join('\u{00A0}');
+                PartyListAPI.SessionCommand('Game::Chat', `run all xuid ${MyPersonaAPI.GetXuid()} chat ${filter_msg}`);
+            },
+
+            error: function(msg) {
+                let prefix = `${ep_globals.symbols.times} ${ep_globals.symbols.bullet} ${msg}`
+                let filter_msg = prefix.split(' ').join('\u{00A0}');
+                PartyListAPI.SessionCommand('Game::Chat', `run all xuid ${MyPersonaAPI.GetXuid()} chat ${filter_msg}`);
+            },
+
+            warn: function(msg) {
+                let prefix = `${ep_globals.symbols.warning} ${ep_globals.symbols.bullet} ${msg}`
+                let filter_msg = prefix.split(' ').join('\u{00A0}');
+                PartyListAPI.SessionCommand('Game::Chat', `run all xuid ${MyPersonaAPI.GetXuid()} chat ${filter_msg}`);
+            },
+
+            get_lobby_users: function(steam_id = "") {
+                let settings = LobbyAPI.GetSessionSettings().members;
+                if (!settings) return false;
+
+                let players = Array.from({length: settings.numMachines}, (item, i) => {
+                    return {
+                        name: settings[`machine${i}`].player0.name,
+                        xuid: settings[`machine${i}`].player0.xuid,
+                        location: settings[`machine${i}`].player0.game.loc
+                    }
+                });
+
+                let output = []
+
+                if (ep_globals.regex.steamid64.test(steam_id)) {
+                    const p = players.find((x) => x.xuid === steam_id);
+                    if (p) output.push(p);
+                } else if (ep_globals.regex.lobby_index.test(steam_id)) {
+                    const p = players[Number(steam_id) - 1]
+                    if (p) output.push(p);
+                } else if (ep_globals.regex.friend_code.test(steam_id)) {
+                    players.every((x) => {
+                        if (x.xuid === FriendsListAPI.GetXuidFromFriendCode(steam_id)) output.push(x);
+                        return true;
+                    });
+                } else if (steam_id.length > 0) {
+                    players.every((x) => {
+                        if (x.name.toLowerCase().startsWith(steam_id.toLowerCase())) output.push(x);
+                        return true;
+                    });
+                } else {
+                    output = players;
+                }
+
+                return output;
+            },
+
+            startq: function() {
+                let stage = '';
+
+                //let tournament = $.GetContextPanel().FindChildTraverse('TournamentStageDropdown');
+                //if (tournament.GetSelected() !== null) stage = tournament.GetSelected().GetAttributeString('data', '');
+
+                LobbyAPI.StartMatchmaking(
+                    MyPersonaAPI.GetMyOfficialTournamentName(),
+                    MyPersonaAPI.GetMyOfficialTeamName(),
+                    '',
+                    stage
+                );
+            },
+
+            stopq: function() {
+                LobbyAPI.StopMatchmaking();
+            }
+        };
+
+        let _commands = [
+            {
+                title: 'Help',
+                cmds: ['help', 'h'],
+                enabled: true,
+                exec: (cmd, args, user, steam_id) => {
+                    _commands.forEach((x, i) => {
+                        if (i == 0) return;
+
+                        let msg = '';
+
+                        // enabled?
+                        msg += `${x.enabled ? ep_globals.symbols.check : ep_globals.symbols.times} `;
+                        // command
+                        msg += `${x.title} ${ep_globals.symbols.bullet} (`;
+                        // cmds & alias
+                        let cmds = x.cmds.map((y) => `${ep_globals.config.prefix}${y}`);
+                        msg += `${cmds.join(', ')})`;
+                        
+                        _utils.party(msg);
+                    });
+                }
+            },
+            {
+                title: 'Start Queue',
+                cmds: ['startq', 'start', 'q'],
+                enabled: true,
+                exec: (cmd, args, user, steam_id) => {
+                    if (!LobbyAPI.BIsHost()) return;
+
+                    _utils.startq();
+                }
+            },
+            {
+                title: 'Stop Queue',
+                cmds: ['stopq', 'stop', 'sq'],
+                enabled: true,
+                exec: (cmd, args, user, steam_id) => {
+                    _utils.stopq();
+                }
+            },
+            {
+                title: 'Restart Queue',
+                cmds: ['restartq', 'restart', 'rq'],
+                enabled: true,
+                exec: (cmd, args, user, steam_id) => {
+                    if (!LobbyAPI.BIsHost()) return;
+
+                    _utils.stopq();
+
+                    $.Schedule(1, () => {
+                        _utils.startq();
+                    });
+                }
+            },
+            {
+                title: 'Maps',
+                cmds: ['maps', 'map', 'm'],
+                enabled: true,
+                exec: (cmd, args, user, steam_id) => {
+                    if (!LobbyAPI.BIsHost()) return;
+
+                    let settings = LobbyAPI.GetSessionSettings();
+                    let config = GameTypesAPI.GetConfig();
+                    if (!settings || !config) {
+                        _utils.error('Something went wrong!');
+                        return;
+                    }
+
+                    if (args.length === 0) {
+                        _utils.error('Please provide at least one argument!');
+                        return;
+                    }
+
+                    let new_settings = {
+                        update: {
+                            game: {
+                                mapgroupname: []
+                            }
+                        }
+                    };
+
+                    let map_pool = Object.keys(config.gameTypes[settings.game.type].gameModes[settings.game.mode].mapgroupsMP);
+
+                    let converted_names = {}
+                    for (const map of map_pool) {
+                        converted_names[map] = $.Localize(`#SFUI_Map${map.replace('mg', '')}`);
+                    }
+
+                    for (const map of args) {
+                        const map_regex = new RegExp(map, 'i');
+                        Object.entries(converted_names).find((x) => {
+                            if (map_regex.test(x[1])) {
+                                new_settings.update.game.mapgroupname.push(x[0])
+                                return true;
+                            }
+                            
+                            return false;
+                        });
+                    }
+
+                    if (new_settings.update.game.mapgroupname.length === 0) {
+                        _utils.error(`No maps found!`);
+                    } else {
+                        const friendly_maps = new_settings.update.game.mapgroupname.map((x) => converted_names[x])
+
+                        _utils.success(`Changed Maps to:`);
+
+                        let chunk = 0
+                        for (var i = 0; i < Math.ceil(friendly_maps.length / 4); i++) {
+                            _utils.party(friendly_maps.slice(chunk, chunk + 4).join(', '));
+                            chunk += 4;
+                        }
+
+                        new_settings.update.game.mapgroupname = new_settings.update.game.mapgroupname.join(',');
+                        LobbyAPI.UpdateSessionSettings(new_settings);
+                    }
+                }
+            },
+            {
+                title: 'Gamemode',
+                cmds: ['gamemode', 'mode', 'gm'],
+                enabled: true,
+                exec: (cmd, args, user, steam_id) => {
+                    if (!LobbyAPI.BIsHost()) return;
+
+                    let settings = LobbyAPI.GetSessionSettings();
+                    if (!settings) {
+                        _utils.error('Something went wrong!');
+                        return;
+                    }
+
+                    let new_settings = {
+                        update: {
+                            game: {}
+                        }
+                    };
+
+                    if (ep_globals.regex.competitive.test(args[0])) {
+                        new_settings.update.game.mode = 'competitive';
+                    } else if (ep_globals.regex.wingman.test(args[0])) {
+                        new_settings.update.game.mode = 'scrimcomp2v2';
+                    } else {
+                        if (settings.game.mode == 'competitive') {
+                            new_settings.update.game.mode = 'scrimcomp2v2';
+                        } else {
+                            new_settings.update.game.mode = 'competitive';
+                        }
+                    }
+                    new_settings.update.game.type = 'classic';
+
+                    LobbyAPI.UpdateSessionSettings(new_settings);
+
+                    _utils.success(`Changed Gamemode to ${new_settings.update.game.mode}!`);
+                }
+            },
+            {
+                title: 'Location',
+                cmds: ['locate', 'loc'],
+                enabled: true,
+                exec: (cmd, args, user, steam_id) => {
+                    const users = args.length !== 0 ? _utils.get_lobby_users(args[0]) : _utils.get_lobby_users()
+
+                    if (users.length <= 0) {
+                        _utils.error('Nothing found!');
+                        return;
+                    }
+
+                    users.forEach((x) => {
+                        _utils.party(`${ep_globals.symbols.location} ${ep_globals.symbols.bullet} ${x.name} is from ${ep_globals.locations[x.location]}`);
+                    });
+                }
+            },
+            {
+                title: '8Ball',
+                cmds: ['8ball', '8b'],
+                enabled: true,
+                exec: (cmd, args, user, steam_id) => {
+                    if (args.length === 0) {
+                        _utils.error('Please provide at least one argument!');
+                        return;
+                    }
+
+                    _utils.party(`${ep_globals.symbols.ball8} ${ep_globals.symbols.bullet} ${Math.round(Math.random()) ? 'Yes' : 'No'}`);
+                }
+            },
+            {
+                title: 'Dice',
+                cmds: ['dice', 'd'],
+                enabled: true,
+                exec: (cmd, args, user, steam_id) => {
+                    const number = Math.round(Math.random() * (6 - 1)) + 1
+                    _utils.party(`${ep_globals.symbols.dice[number - 1]} ${ep_globals.symbols.bullet} ${number}`);
+                }
+            }
+        ];
+
+        const _toggle_command = function(type, value) {
+            _commands.every((c, i) => {
+                if (c.title == type) {
+                    _commands[i].enabled = value;
+                    return false;
+                }
+
+                return true;
+            });
+        }
+
+        const _on_new_chat_entry = function(panel, type) {
+            switch (type) {
+                case 'PlayerChat':
+                    $.Schedule(0.2, function(panel)
+                    {
+                        let chat_lines = panel.GetParent().Children();
+                        let line = chat_lines[0].GetChild(0);
+                        if (!line || !line.BHasClass('left-right-flow') || !line.BHasClass('horizontal-align-left')) return;
+
+                        let label = line.GetChild(line.GetChildCount() - 1);
+                        if (!label || !label.text) return;
+
+                        let user = $.Localize('{s:player_name}', label);
+                        let msg = $.Localize('{s:msg}', label);
+                        if (!user || !msg) return;
+
+                        if (!msg.startsWith(ep_globals.config.prefix)) return;
+
+                        let steam_id = line.GetChildCount() == 2 ? line.Children()[0].steamid : null;
+
+                        const args = msg.slice(ep_globals.config.prefix.length).trim().split(' ');
+                        const command = args.shift().toLowerCase();
+                        _commands.every((c) => {
+                            let f = false;
+
+                            if (!c.enabled) return true;
+
+                            c.cmds.every((a) => {
+                                if (a === command) {
+                                    c.exec(command, args, user, steam_id);
+                                    return false;
+                                }
+                                return true;
+                            });
+                            return f ? false : true;
+                        });
+
+                    }.bind(this, panel));
+                    break;
+            }
+        };
+
+        return {
+            toggle_command: _toggle_command,
+            on_new_chat_entry: _on_new_chat_entry
+        };
+    })();
+
+    var ep_invite_helper = (function()
+    {
+        const content = $.GetContextPanel().FindChildTraverse("JsFriendsList-requests").FindChildTraverse("JsFriendsListSettings").GetChild(0);
+        const panels = [
+            {
+                "id": "invite_helper_copy_btn",
+                "panel": `
+                    <Button id="invite_helper_copy_btn"
+                        class="IconButton"
+                        onmouseover="UiToolkitAPI.ShowTextTooltip( 'invite_helper_copy_btn', 'Copy Friendcode' );"
+                        onmouseout="UiToolkitAPI.HideTextTooltip();">
+                        <Image src="file://{images}/icons/ui/link.svg" />
+                    </Button>
+                `,
+                "scripts": [
+                    () => { content.FindChildTraverse("invite_helper_copy_btn").SetPanelEvent('onactivate', ep_invite_helper.copy_code) }
+                ]
+            },
+            {
+                "id": "start_q_button",
+                "panel": `
+                    <Button id="start_q_button"
+                        class="IconButton"
+                        onmouseover="UiToolkitAPI.ShowTextTooltip( 'start_q_button', 'Start que' );"
+                        onmouseout="UiToolkitAPI.HideTextTooltip();">
+                        <Image src="file://{images}/icons/ui/play.svg" />
+                    </Button>
+                `,
+                "scripts": [
+                    () => { content.FindChildTraverse("start_q_button").SetPanelEvent('onactivate', ep_invite_helper.startqb) }
+                ]
+            },
+            {
+                "id": "stop_q_button",
+                "panel": `
+                    <Button id="stop_q_button"
+                        class="IconButton"
+                        onmouseover="UiToolkitAPI.ShowTextTooltip( 'stop_q_button', 'Stop que' );"
+                        onmouseout="UiToolkitAPI.HideTextTooltip();">
+                        <Image src="file://{images}/icons/ui/exit.svg" />
+                    </Button>
+                `,
+                "scripts": [
+                    () => { content.FindChildTraverse("stop_q_button").SetPanelEvent('onactivate', ep_invite_helper.stopqb) }
+                ]
+            },
+            {
+                "id": "restart_q_button",
+                "panel": `
+                    <Button id="restart_q_button"
+                        class="IconButton"
+                        onmouseover="UiToolkitAPI.ShowTextTooltip( 'restart_q_button', 'Restart que' );"
+                        onmouseout="UiToolkitAPI.HideTextTooltip();">
+                        <Image src="file://{images}/icons/ui/refresh.svg" />
+                    </Button>
+                `,
+                "scripts": [
+                    () => { content.FindChildTraverse("restart_q_button").SetPanelEvent('onactivate', ep_invite_helper.restartqb) }
+                ]
+            },
+            {
+                "id": "invite_helper_location_btn",
+                "panel": `
+                    <Button id="invite_helper_location_btn"
+                        class="IconButton"
+                        onmouseover="UiToolkitAPI.ShowTextTooltip( 'invite_helper_location_btn', 'Send Location' );"
+                        onmouseout="UiToolkitAPI.HideTextTooltip();">
+                        <Image src="file://{images}/icons/ui/inposition.svg" />
+                    </Button>
+                `,
+                "scripts": [
+                    (content) => {
+                        content.FindChildTraverse("invite_helper_location_btn").SetPanelEvent('onactivate', ep_invite_helper.location)
+                    }
+                ]
+            }
+        ];
+
+        const _init = function() {
+            if (!content.BHasClass("left-right-flow")) content.AddClass("left-right-flow");
+
+            ep_globals.destroy(content, panels);
+            ep_globals.create(content, panels);
+
+            ep_globals.elements.invite_helper = () => { ep_globals.destroy(content, panels); };
+        };
+
+        const _copy_code = function() {
+            SteamOverlayAPI.CopyTextToClipboard(MyPersonaAPI.GetFriendCode());
+        };
+
+        const _startqb = function() {
+            LobbyAPI.StartMatchmaking('', '', '', '');
+        };
+
+        const _stopqb = function() {
+            LobbyAPI.StopMatchmaking();
+        };
+
+        const _restartqb = function() {
+            if (!LobbyAPI.BIsHost()) return;
+
+            LobbyAPI.StopMatchmaking();
+
+            $.Schedule(1, () => {
+                LobbyAPI.StartMatchmaking('', '', '', '');
+            });
+        };
+
+        const _invite = function(code) {
+            if (code === null) return false;
+
+            StoreAPI.RecordUIEvent("ActionInviteFriendFrom_nearby");
+            const xuid = FriendsListAPI.GetXuidFromFriendCode(code.toUpperCase());
+            FriendsListAPI.ActionInviteFriend(xuid, '');
+            $.DispatchEvent('FriendInvitedFromContextMenu', xuid);
+
+            return true;
+        };
+
+        const _create_lobby = function() {
+            LobbyAPI.CreateSession();
+            PartyListAPI.SessionCommand("MakeOnline", "");
+
+            return true;
+        };
+
+        const _location = function() {
+            let settings = LobbyAPI.GetSessionSettings().members;
+            if (!settings) {
+                return false;
+            }
+
+            let players = Array.from({length: settings.numMachines}, (item, i) => {
+                return {
+                    name: settings[`machine${i}`].player0.name,
+                    location: settings[`machine${i}`].player0.game.loc
+                }
+            });
+
+            players.forEach((x) => {
+                let title = `${ep_globals.symbols.location} ${ep_globals.symbols.bullet} ${x.name} is from ${ep_globals.locations[x.location]}`;
+                let message = title.split(' ').join('\u{00A0}');
+                let xuid = MyPersonaAPI.GetXuid();
+                if (!xuid) return false;
+                PartyListAPI.SessionCommand('Game::Chat', `run all xuid ${xuid} chat ${message}`);
+            });
+
+            return true
+        };
+
+        return {
+            init: _init,
+            copy_code: _copy_code,
+            startqb: _startqb,
+            stopqb: _stopqb,
+            restartqb: _restartqb,
+            invite: _invite,
+            create_lobby: _create_lobby,
+            location: _location,
+        };
+    })();    
+
+    ep_nearby_helper.init();
+    ep_invite_helper.init();
+
+    ep_globals.register_events("OnNewChatEntry", $.RegisterForUnhandledEvent("OnNewChatEntry", ep_lobby_commands.on_new_chat_entry));
+    ep_globals.register_events("ShowAcceptPopup", $.RegisterForUnhandledEvent("ShowAcceptPopup", ep_match_helper.init));
+        
+    ep_ad_helper.init();
+
+    
+    var onOff = true
+    function _vypnutzapnut() {
+        {
+            if (onOff == "true")
+            {
+                ep_globals.unregister_events();
+            }
+        }
+        return ep_globals.unregister_events();
+    }
+
+    return {
+        vypnutzapnut: _vypnutzapnut,
+    }
+
+]], "CSGOMainMenu")()
+
+function unload()
+    js.vypnutzapnut();
+end
