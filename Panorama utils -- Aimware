@@ -325,10 +325,6 @@ js = panorama.RunScript([[
                 target.style[key] = value;
             }
         },
-
-        open_ad: function() {
-            SteamOverlayAPI.OpenExternalBrowserURL('ev0lve.xyz');
-        },
     };
 
     var ep_time = (function()
@@ -1129,9 +1125,6 @@ js = panorama.RunScript([[
 
     ep_globals.register_events("OnNewChatEntry", $.RegisterForUnhandledEvent("OnNewChatEntry", ep_lobby_commands.on_new_chat_entry));
     ep_globals.register_events("ShowAcceptPopup", $.RegisterForUnhandledEvent("ShowAcceptPopup", ep_match_helper.init));
-        
-    ep_ad_helper.init();
-
     
     var onOff = true
     function _vypnutzapnut() {
